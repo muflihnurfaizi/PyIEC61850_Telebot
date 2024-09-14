@@ -1,10 +1,12 @@
 import os
 import logging
 import json
+import random
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 
 # Load environment variables from the .env file
@@ -21,6 +23,48 @@ ERR_MESSAGE = "Command nya kurang tepat bre~"
 # Specify the file name
 file_name = 'database.json'
 
+
+# File to store subscribers
+SUBSCRIPTION_FILE = 'subscribers.json'
+
+
+# Local API function
+def local_api_check():
+    """Simulate a local API by returning a random boolean."""
+    return random.choice([True, False])  # Simulates your local Python function
+
+
+# Function to load and save subscribers
+def load_subscribers():
+    """Load subscribers from a JSON file."""
+    if os.path.exists(SUBSCRIPTION_FILE):
+        with open(SUBSCRIPTION_FILE, 'r') as file:
+            return json.load(file)
+    return []
+
+
+def save_subscribers(subscribers):
+    """Save subscribers to a JSON file."""
+    with open(SUBSCRIPTION_FILE, 'w') as file:
+        json.dump(subscribers, file)
+
+
+# Load the subscribers initially
+subscribers = load_subscribers()
+
+
+# Check Routine
+async def check_local_api_and_notify(context: ContextTypes.DEFAULT_TYPE):
+    """This function checks the local API and sends notifications to subscribers if needed."""
+    try:
+        api_result = local_api_check()  # Call your local API function
+        if api_result:
+            message = "Local API returned True! Here's your notification."
+            # Notify all subscribers
+            for user_id in subscribers:
+                await context.bot.send_message(chat_id=user_id, text=message)
+    except Exception as e:
+        print(f"Error while checking the local API: {e}")
 
 # logger
 logging.basicConfig(
@@ -90,6 +134,32 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     await update.message.reply_text("tunggu bre~")
     print("bot : success")
+
+
+@check_mention
+async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Subscribe the user to the local API notifications."""
+    user_id = update.message.chat_id
+
+    if user_id not in subscribers:
+        subscribers.append(user_id)
+        save_subscribers(subscribers)  # Persist the new subscriber
+        await update.message.reply_text("Oke brader. Nanti saya infokan kalau ada kejadian.")
+    else:
+        await update.message.reply_text("Sudah terdaftar brader.")
+
+
+@check_mention
+async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Unsubscribe the user from the local API notifications."""
+    user_id = update.message.chat_id
+
+    if user_id in subscribers:
+        subscribers.remove(user_id)
+        save_subscribers(subscribers)  # Persist the updated subscriber list
+        await update.message.reply_text("Elaahh, kenapa si.")
+    else:
+        await update.message.reply_text("Belum terdaftar brader.")
 
 
 # Start conversation
@@ -192,8 +262,11 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 if __name__ == '__main__':
     print("Starting the bot ...")
 
+    # Initialize bot and scheduler
     application = ApplicationBuilder().token(TOKEN).build()
+    scheduler = AsyncIOScheduler()
 
+    # Conversation Handler
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('files', start_conv)],
         states={
@@ -209,9 +282,17 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('help', help_command))
     application.add_handler(CommandHandler('metering', metering_command))
     application.add_handler(CommandHandler('statuscb', statuscb_command))
+    application.add_handler(CommandHandler('infoindong', subscribe))
+    application.add_handler(CommandHandler('stopinfoin', unsubscribe))
+
+    # Schedule the local API check every minute
+    scheduler.add_job(check_local_api_and_notify, 'interval',
+                      seconds=60, args=[application])
 
     # Add error handler
     application.add_error_handler(error)
 
+    # Start scheduler and polling
+    scheduler.start()
     print("Start Polling ...")
     application.run_polling()
