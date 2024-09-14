@@ -1,0 +1,274 @@
+{ 
+    "MRNDA1": {
+        "OCR": {
+            "Ied_IP": "192.16.1.12",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.11",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "MRNDA2": {
+        "OCR": {
+            "Ied_IP": "192.16.1.22",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.21",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "HRPIN": {
+        "OCR": {
+            "Ied_IP": "192.16.1.32",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.31",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "KDSPI": {
+        "OCR": {
+            "Ied_IP": "192.16.1.42",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.41",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "PGLGN": {
+        "OCR": {
+            "Ied_IP": "192.16.1.52",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.51",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "RATER": {
+        "OCR": {
+            "Ied_IP": "192.16.1.62",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.61",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "SKTNI1": {
+        "OCR": {
+            "Ied_IP": "192.16.1.72",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.71",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "SKTNI2": {
+        "OCR": {
+            "Ied_IP": "192.16.1.82",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.1.81",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "PDKLP1": {
+        "OCR": {
+            "Ied_IP": "192.16.2.12",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.2.11",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "CCP": {
+            "Ied_IP": "192.16.2.15",
+            "Ied_Dir": "LD/OH9MPU2Gen/COMTRADE/"
+        }
+    },
+    "PDKLP2": {
+        "OCR": {
+            "Ied_IP": "192.16.2.22",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.2.21",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "CCP": {
+            "Ied_IP": "192.16.2.25",
+            "Ied_Dir": "LD/OH10MPU2Gen/COMTRADE/"
+        }
+    },
+    "SMRCN1": {
+        "OCR": {
+            "Ied_IP": "192.16.2.32",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.2.31",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "SMRCN2": {
+        "OCR": {
+            "Ied_IP": "192.16.2.42",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "LCD": {
+            "Ied_IP": "192.16.2.41",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "TRAFO1": {
+        "SBEF": {
+            "Ied_IP": "192.16.1.114",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRLV": {
+            "Ied_IP": "192.16.1.113",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRHV": {
+            "Ied_IP": "192.16.1.112",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "DIFF": {
+            "Ied_IP": "192.16.1.111",
+            "Ied_Dir": "LD/TRF1MPUGen/COMTRADE/"
+        }
+    },
+    "TRAFO2": {
+        "SBEF": {
+            "Ied_IP": "192.16.1.124",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRLV": {
+            "Ied_IP": "192.16.1.123",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRHV": {
+            "Ied_IP": "192.16.1.122",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "DIFF": {
+            "Ied_IP": "192.16.1.121",
+            "Ied_Dir": "LD/TRF2MPUGen/COMTRADE/"
+        }
+    },
+    "TRAFO3": {
+        "SBEF": {
+            "Ied_IP": "192.16.1.134",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRLV": {
+            "Ied_IP": "192.16.1.133",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRHV": {
+            "Ied_IP": "192.16.1.132",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "DIFF": {
+            "Ied_IP": "192.16.1.131",
+            "Ied_Dir": "LD/TRF3MPUGen/COMTRADE/"
+        }
+    },
+    "TRAFO4": {
+        "SBEF": {
+            "Ied_IP": "192.16.1.144",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRLV": {
+            "Ied_IP": "192.16.1.143",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRHV": {
+            "Ied_IP": "192.16.1.142",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "DIFF": {
+            "Ied_IP": "192.16.1.141",
+            "Ied_Dir": "LD/TRF4MPUGen/COMTRADE/"
+        }
+    },
+    "TRAFO5": {
+        "SBEF": {
+            "Ied_IP": "192.16.1.154",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRLV": {
+            "Ied_IP": "192.16.1.153",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "OCRHV": {
+            "Ied_IP": "192.16.1.152",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "DIFF": {
+            "Ied_IP": "192.16.1.151",
+            "Ied_Dir": "LD/TRF5MPUGen/COMTRADE/"
+        }
+    },
+    "CPSTR1": {
+        "BPU1": {
+            "Ied_IP": "192.16.1.162",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "BPU2": {
+            "Ied_IP": "192.16.1.163",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "CPSTR2": {
+        "BPU1": {
+            "Ied_IP": "192.16.1.172",
+            "Ied_Dir": "/COMTRADE"
+        },
+        "BPU2": {
+            "Ied_IP": "192.16.1.173",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "BUSPR1": {
+        "MPU1": {
+            "Ied_IP": "192.16.1.221",
+            "Ied_Dir": "LD/BUSPRO1Gen/COMTRADE/"
+        },
+        "MPU2": {
+            "Ied_IP": "192.16.1.222",
+            "Ied_Dir": "LD/BUSPRO2Gen/COMTRADE/"
+        }
+    },
+    "KOPEL1": {
+        "OCR": {
+            "Ied_IP": "192.16.1.212",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "KOPEL2": {
+        "OCR": {
+            "Ied_IP": "192.16.2.212",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "BUSTI1": {
+        "OCR": {
+            "Ied_IP": "192.16.1.232",
+            "Ied_Dir": "/COMTRADE"
+        }
+    },
+    "BUSTI2": {
+        "OCR": {
+            "Ied_IP": "192.16.1.242",
+            "Ied_Dir": "/COMTRADE"
+        }
+    }
+}
