@@ -1,17 +1,26 @@
+# This file is part of OB-bot.
+# OB-bot is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 import os
 import logging
 import json
 import random
-from dotenv import load_dotenv
+from config import TELEGRAM_BOT_TOKEN
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-
-# Load environment variables from the .env file
-load_dotenv()
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
 
 # Define states
@@ -263,7 +272,7 @@ if __name__ == '__main__':
     print("Starting the bot ...")
 
     # Initialize bot and scheduler
-    application = ApplicationBuilder().token(TOKEN).build()
+    application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
     scheduler = AsyncIOScheduler()
 
     # Conversation Handler
