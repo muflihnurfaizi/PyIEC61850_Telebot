@@ -16,7 +16,6 @@ import os
 import logging
 import json
 import random
-from config import TELEGRAM_BOT_TOKEN
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
@@ -30,7 +29,8 @@ ERR_MESSAGE = "Command nya kurang tepat bre~"
 
 # Load database
 # Specify the file name
-file_name = 'database.json'
+database_file = 'database.json'
+config_file = 'config.json'
 
 
 # File to store subscribers
@@ -83,13 +83,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Loading JSON data
+# Loading database file
 try:
-    with open(file_name, 'r') as json_file:
+    with open(database_file, 'r') as json_file:
         db = json.load(json_file)
 except (FileNotFoundError, json.JSONDecodeError) as e:
     print(f"Error loading database: {e}")
     db = {}
+
+
+# Loading config file
+try:
+    with open(config_file, 'r') as json_file:
+        config = json.load(json_file)
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    print(f"Error loading database: {e}")
+    config = {}
 
 
 # Custom middleware to check if bot is tagged in group chats
@@ -272,7 +281,8 @@ if __name__ == '__main__':
     print("Starting the bot ...")
 
     # Initialize bot and scheduler
-    application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+    application = ApplicationBuilder().token(
+        config.get('TELEGRAM_BOT_TOKEN')).build()
     scheduler = AsyncIOScheduler()
 
     # Conversation Handler
