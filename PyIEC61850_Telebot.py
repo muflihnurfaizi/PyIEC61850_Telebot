@@ -29,7 +29,7 @@ ERR_MESSAGE = "Command nya kurang tepat bre~"
 
 # Load database
 # Specify the file name
-database_file = 'database.json'
+database_file = 'databaseIED.json'
 config_file = 'config.json'
 
 
