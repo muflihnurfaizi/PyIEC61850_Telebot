@@ -2,7 +2,7 @@
 
 PyIEC61850_Telebot is a Python-based program designed to fetch data from Intelligent Electronic Devices (IEDs) in substations using the IEC 61850 protocol. It connects to IEDs through the [libIEC61850 library](https://github.com/mz-automation/libiec61850?tab=readme-ov-file) , compiled with slight modifications for Python. The Telegram bot functionality is built using the [python-telegram-bot library](https://github.com/python-telegram-bot/python-telegram-bot). The system has been tested and successfully implemented on a Raspberry Pi 4.
 
-[Learn how to modified and compile the libIEC61850](https://react.dev/learn).
+[Learn how to install the pyiec61850](https://github.com/muflihnurfaizi/Install-pyiec61850).
 
 ## Installation
 
