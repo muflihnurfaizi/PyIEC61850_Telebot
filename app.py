@@ -16,16 +16,12 @@ import os
 import logging
 import json
 import random
-import datetime
-import locale
-from api import bcu_api
+from api import bcu_api, current_time
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-# Set locale ke bahasa Indonesia
-locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
 # Define states
 CHOOSING_BAY, CHOOSING_IED, CHOOSING_ACTION = range(3)
@@ -170,10 +166,7 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     results_str = ""
     results_str += f"DATA METERING {substation}\n"
-    # Dapatkan waktu sekarang
-    now = datetime.datetime.now()
-    # Format string sesuai kebutuhan
-    results_str += now.strftime("Tanggal : %d %B %Y, Pukul %H:%M WIB")
+    results_str += current_time.getCurrTime()
 
     for bay_name, measurements in metering.items():
         # Extract and format the required values

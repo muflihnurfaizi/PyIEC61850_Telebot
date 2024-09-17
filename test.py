@@ -1,13 +1,13 @@
 # appfiles/test.py
 import logging
 import json
-from api import bcu_api
+from api import current_time
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
 if __name__ == '__main__':
-    try:
+    """try:
         with open('databaseBCU.json', 'r') as file:
             ieds = json.load(file)
 
@@ -18,4 +18,7 @@ if __name__ == '__main__':
     except json.JSONDecodeError as e:
         logging.error(f"Error parsing JSON: {e}")
     except Exception as e:
-        logging.error(f"Unexpected error: {e}")
+        logging.error(f"Unexpected error: {e}")"""
+    
+    print(current_time.getCurrTime())
+
