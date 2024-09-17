@@ -55,6 +55,6 @@ def getMeteringBCU(ieds, type):
             iec61850.IedConnection_close(connection)
             iec61850.IedConnection_destroy(connection)
 
-    time.sleep(1)  # If necessary, can be made configurable
+    time.sleep(3)  # If necessary, can be made configurable
 
     return datas
