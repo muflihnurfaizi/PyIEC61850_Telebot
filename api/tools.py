@@ -34,7 +34,7 @@ def format_metering_data(metering: dict, substation: str) -> str:
     results = [
         f"DATA METERING {substation}",
         getCurrTime(),
-        "\n"
+        "-------------------------------------"
     ]
 
     # Iterate through the metering data and format each bay's information
