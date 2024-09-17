@@ -167,6 +167,7 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     results_str = ""
     results_str += f"DATA METERING {substation}\n"
     results_str += current_time.getCurrTime()
+    results_str += "\n\n"
 
     for bay_name, measurements in metering.items():
         # Extract and format the required values
@@ -178,7 +179,7 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Print the extracted and formatted information for each bay
         results_str += f"{bay_name}: {curr_phs_b} A, {volt_phs_ca} kV, {w} MW, {var} Mvar \n"
 
-    print(results_str)
+    await update.message.reply_text(results_str, parse_mode= constants.ParseMode.HTML)
     print("bot : success")
 
 

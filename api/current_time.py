@@ -4,7 +4,7 @@ import datetime
 def getCurrTime():
 
     # Dapatkan waktu sekarang
-    now = datetime.datetime.now()
+    now = datetime.datetime.now() + datetime.timedelta(hours=6)
 
     # Format string sesuai kebutuhan, dengan bulan manual
     bulan_dict = {
