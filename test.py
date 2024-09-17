@@ -11,7 +11,7 @@ if __name__ == '__main__':
         with open('databaseBCU.json', 'r') as file:
             ieds = json.load(file)
 
-        result = bcu_api.getMeteringBCU(ieds)
+        result = bcu_api.getMeteringBCU(ieds, type="C264dss")
         logging.info(f"Metering data received: {result}")
     except FileNotFoundError:
         logging.error("databaseBCU.json file not found.")

@@ -9,11 +9,26 @@ logging.basicConfig(level=logging.INFO)
 # Constants
 TCP_PORT = 102
 
-def getMeteringBCU(ieds):
+
+def getMeteringBCU(ieds, type):
     """
-    Fetch metering data from all IEDs.
+    Fetch metering data from all IEDs using a dynamically selected function 
+    based on the type.
+
+    :param ieds: A dictionary containing IED configurations.
+    :param type: The type of IED (e.g., "C264dss", "SIEMENS").
     """
     datas = {}
+
+    # Construct the function name dynamically based on the measurement type
+    function_name = f"getDataMetering{type}"
+
+    # Use getattr to fetch the correct function from libied
+    try:
+        get_data_func = getattr(libied, function_name)
+    except AttributeError:
+        logging.error(f"No function found for measurement type: {type}")
+        return {"error": f"No function found for measurement type: {type}"}
 
     for bay, ied_info in ieds.items():
         hostname = ied_info["Ied_IP"]
@@ -23,10 +38,12 @@ def getMeteringBCU(ieds):
 
         try:
             logging.info(f"Attempting to connect to {hostname}:{TCP_PORT}")
-            error = iec61850.IedConnection_connect(connection, hostname, TCP_PORT)
+            error = iec61850.IedConnection_connect(
+                connection, hostname, TCP_PORT)
 
             if error == iec61850.IED_ERROR_OK:
-                data = libied.getDataMeteringC264dss(connection, iedname)
+                # Dynamically call the selected function
+                data = get_data_func(connection, iedname)
                 datas[bay] = data
             else:
                 logging.error(f"Failed to connect to {hostname}:{TCP_PORT}")
