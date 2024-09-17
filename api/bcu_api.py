@@ -8,6 +8,20 @@ logging.basicConfig(level=logging.INFO)
 
 # Constants
 TCP_PORT = 102
+failed_data = {'freq': 0,
+                'currPhsA': 0,
+                  'currPhsB': 404,
+                    'currPhsC': 0,
+                      'currPhsN': 0,
+                        'voltPhsA': 0,
+                          'voltPhsB': 0,
+                            'voltPhsC': 0,
+                              'voltPhsAB': 0,
+                                'voltPhsBC': 0,
+                                  'voltPhsCA': 0,
+                                    'VA': 0,
+                                      'VAR': 0,
+                                        'W': 0}
 
 
 def getMeteringBCU(ieds, type):
@@ -47,10 +61,10 @@ def getMeteringBCU(ieds, type):
                 datas[bay] = data
             else:
                 logging.error(f"Failed to connect to {hostname}:{TCP_PORT}")
-                datas[bay] = "Connection failed"
+                datas[bay] = failed_data
         except iec61850.IEDConnectionError as e:
             logging.error(f"Error connecting to IED {hostname}: {e}")
-            datas[bay] = f"Error: {e}"
+            datas[bay] = failed_data
         finally:
             iec61850.IedConnection_close(connection)
             iec61850.IedConnection_destroy(connection)

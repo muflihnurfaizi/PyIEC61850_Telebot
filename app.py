@@ -16,7 +16,7 @@ import os
 import logging
 import json
 import random
-from api import bcu_api, current_time
+from api import bcu_api, tools
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
@@ -164,23 +164,14 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("tunggu bre~")
     metering = bcu_api.getMeteringBCU(db_BCU, type=config.get("TYPE_BCU"))
 
-    results_str = ""
-    results_str += f"DATA METERING {substation}\n"
-    results_str += current_time.getCurrTime()
-    results_str += "\n\n"
+    if not metering:
+        await update.message.reply_text("Failed to retrieve metering data.")
+        return
 
-    for bay_name, measurements in metering.items():
-        # Extract and format the required values
-        curr_phs_b = str(round(measurements.get('currPhsB', 0.0)))
-        volt_phs_ca = str(round(measurements.get('voltPhsCA', 0.0)))
-        w = str(round(measurements.get('W', 0.0)))
-        var = str(round(measurements.get('VAR', 0.0)))
-
-        # Print the extracted and formatted information for each bay
-        results_str += f"{bay_name}: {curr_phs_b} A, {volt_phs_ca} kV, {w} MW, {var} Mvar \n"
-
-    await update.message.reply_text(results_str, parse_mode= constants.ParseMode.HTML)
-    print("bot : success")
+    # Prepare the result string and send it
+    results_str = tools.format_metering_data(metering,substation)
+    await update.message.reply_text(results_str, parse_mode=constants.ParseMode.HTML)
+    print("bot: success")
 
 
 @check_mention
