@@ -24,7 +24,6 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 from functools import wraps
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-
 # Set locale ke bahasa Indonesia
 locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
@@ -114,6 +113,8 @@ except (FileNotFoundError, json.JSONDecodeError) as e:
     print(f"Error loading database: {e}")
     config = {}
 
+# Substation Name
+substation = config.get("SUBSTATION_NAME")
 
 # Custom middleware to check if bot is tagged in group chats
 def check_mention(func):
@@ -168,7 +169,7 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     metering = bcu_api.getMeteringBCU(db_BCU, type=config.get("TYPE_BCU"))
 
     results_str = ""
-    results_str += f"DATA METERING {config.get("SUBSTATION_NAME")}\n"
+    results_str += f"DATA METERING {substation}\n"
     # Dapatkan waktu sekarang
     now = datetime.datetime.now()
     # Format string sesuai kebutuhan
