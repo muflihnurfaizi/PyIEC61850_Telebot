@@ -16,12 +16,17 @@ import os
 import logging
 import json
 import random
+import datetime
+import locale
 from api import bcu_api
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+
+# Set locale ke bahasa Indonesia
+locale.setlocale(locale.LC_TIME, 'id_ID.UTF-8')
 
 # Define states
 CHOOSING_BAY, CHOOSING_IED, CHOOSING_ACTION = range(3)
@@ -161,7 +166,25 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     await update.message.reply_text("tunggu bre~")
     metering = bcu_api.getMeteringBCU(db_BCU, type=config.get("TYPE_BCU"))
-    print(metering)
+
+    results_str = ""
+    results_str += f"DATA METERING {config.get("SUBSTATION_NAME")}\n"
+    # Dapatkan waktu sekarang
+    now = datetime.datetime.now()
+    # Format string sesuai kebutuhan
+    results_str += now.strftime("Tanggal : %d %B %Y, Pukul %H:%M WIB")
+
+    for bay_name, measurements in metering.items():
+        # Extract and format the required values
+        curr_phs_b = str(round(measurements.get('currPhsB', 0.0)))
+        volt_phs_ca = str(round(measurements.get('voltPhsCA', 0.0)))
+        w = str(round(measurements.get('W', 0.0)))
+        var = str(round(measurements.get('VAR', 0.0)))
+
+        # Print the extracted and formatted information for each bay
+        results_str += f"{bay_name}: {curr_phs_b} A, {volt_phs_ca} kV, {w} MW, {var} Mvar \n"
+
+    print(results_str)
     print("bot : success")
 
 
@@ -196,7 +219,7 @@ async def unsubscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start_conv(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Create inline keyboard dynamically from db.keys()
     keyboard = [[InlineKeyboardButton(bays, callback_data=bays)]
-                for bays in db.keys()]
+                for bays in db_IED.keys()]
 
     # Create the inline keyboard markup
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -214,13 +237,13 @@ async def choose_bay(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()  # Acknowledge the callback
 
     bay = query.data  # Get the selected bay from callback data
-    if bay in db:
+    if bay in db_IED:
         # Store the selected bay in user_data
         context.user_data['bay'] = bay
 
         # Create an inline keyboard from db[bay].keys()
         keyboard = [[InlineKeyboardButton(
-            bay_option, callback_data=bay_option)] for bay_option in db[bay].keys()]
+            bay_option, callback_data=bay_option)] for bay_option in db_IED[bay].keys()]
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         # Send a message with the inline keyboard
@@ -240,7 +263,7 @@ async def choose_ied(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     ied = query.data  # Get the selected IED from callback data
     bay = context.user_data['bay']
-    if ied in db[bay]:
+    if ied in db_IED[bay]:
         context.user_data['ied'] = ied
 
         # Provide actions for the user to choose
@@ -265,7 +288,7 @@ async def choose_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     action = query.data  # Either 'liatin' or 'ambilin'
     bay = context.user_data['bay']
     ied = context.user_data['ied']
-    iedDatas = db[bay][ied]
+    iedDatas = db_IED[bay][ied]
 
     if action == 'liatin':
         await query.edit_message_text(f"Menampilkan data untuk Bay: {bay}, IED: {ied}. Data: {iedDatas}")
