@@ -1,7 +1,7 @@
 import time
 import iec61850
 import logging
-from lib.libied import getDataMeteringC264dss
+from lib import libied
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +26,7 @@ def getMeteringBCU(ieds):
             error = iec61850.IedConnection_connect(connection, hostname, TCP_PORT)
 
             if error == iec61850.IED_ERROR_OK:
-                data = getDataMeteringC264dss(connection, iedname)
+                data = libied.getDataMeteringC264dss(connection, iedname)
                 datas[bay] = data
             else:
                 logging.error(f"Failed to connect to {hostname}:{TCP_PORT}")
