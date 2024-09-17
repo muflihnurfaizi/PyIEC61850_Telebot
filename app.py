@@ -16,6 +16,7 @@ import os
 import logging
 import json
 import random
+from api import bcu_api
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
@@ -29,7 +30,8 @@ ERR_MESSAGE = "Command nya kurang tepat bre~"
 
 # Load database
 # Specify the file name
-database_file = 'databaseIED.json'
+databaseIED = 'databaseIED.json'
+databaseBCU = 'databaseBCU.json'
 config_file = 'config.json'
 
 
@@ -83,14 +85,21 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Loading database file
+# Loading database IED
 try:
-    with open(database_file, 'r') as json_file:
-        db = json.load(json_file)
+    with open(databaseIED, 'r') as json_file:
+        db_IED = json.load(json_file)
 except (FileNotFoundError, json.JSONDecodeError) as e:
     print(f"Error loading database: {e}")
-    db = {}
+    db_IED = {}
 
+# Loading database BCU
+try:
+    with open(databaseBCU, 'r') as json_file:
+        db_BCU = json.load(json_file)
+except (FileNotFoundError, json.JSONDecodeError) as e:
+    print(f"Error loading database: {e}")
+    db_BCU = {}
 
 # Loading config file
 try:
@@ -151,6 +160,8 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(ERR_MESSAGE)
         return
     await update.message.reply_text("tunggu bre~")
+    metering = bcu_api.getMeteringBCU(db_BCU, type=config.get("TYPE_BCU"))
+    print(metering)
     print("bot : success")
 
 
