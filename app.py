@@ -1,5 +1,5 @@
-# This file is part of OB-bot.
-# OB-bot is free software: you can redistribute it and/or modify
+# This file is part of PyIEC61850_Telebot.
+# PyIEC61850_Telebot is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
@@ -16,7 +16,7 @@ import os
 import logging
 import json
 import random
-from api import bcu_api, tools
+from api import bcu_api, tools, downIED_api
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, constants
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler, CallbackQueryHandler
 from functools import wraps
@@ -26,6 +26,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 # Define states
 CHOOSING_BAY, CHOOSING_IED, CHOOSING_ACTION = range(3)
 ERR_MESSAGE = "Command nya kurang tepat bre~"
+MAX_FILES = 6
 
 
 # Load database
@@ -293,7 +294,10 @@ async def choose_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
     iedDatas = db_IED[bay][ied]
 
     if action == 'liatin':
-        await query.edit_message_text(f"Menampilkan data untuk Bay: {bay}, IED: {ied}. Data: {iedDatas}")
+        file_names = downIED_api.get_file_names(iedDatas, MAX_FILES)
+        results_str = tools.format_file_list(bay, ied, file_names)
+        await query.edit_message_text(results_str, parse_mode=constants.ParseMode.HTML)
+
     elif action == 'ambilin':
         await query.edit_message_text(f"Mengambil data untuk Bay: {bay}, IED: {ied}. Data: {iedDatas}")
 

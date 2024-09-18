@@ -128,3 +128,32 @@ def format_statuscb_data(status: dict, substation: str) -> str:
 
     # Join the list into a final string
     return "\n".join(results)
+
+def format_file_list(bay, ied, file_names):
+    """
+    Format the file list result into a readable string format for a specific bay and IED.
+    
+    Args:
+        bay (str): The name or ID of the bay.
+        ied (str): The name or IP of the IED.
+        file_names (list or str): The result of the get_file_names function, either a list of file names or an error message.
+        
+    Returns:
+        str: A formatted string displaying the file list or an error message.
+    """
+    # Header message with bay and IED info
+    result_str = f"Menampilkan data untuk Bay {bay} IED {ied}\n\n"
+
+    # If file_names is a string, it's an error message, so display it
+    if isinstance(file_names, str):
+        result_str += f"{file_names}\n"
+    else:
+        # If file_names is a list, display the files as a numbered list
+        for i, file_name in enumerate(file_names, start=1):
+            result_str += f"{i}. {file_name}\n"
+
+    # Footer message
+    result_str += "\nBerikut brader\n"
+
+    return result_str
+
