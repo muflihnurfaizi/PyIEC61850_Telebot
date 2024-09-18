@@ -59,3 +59,72 @@ def format_metering_data(metering: dict, substation: str) -> str:
 
     # Join the list into a final string
     return "\n".join(results)
+
+
+def format_statuscb_data(status: dict, substation: str) -> str:
+    """
+    Formats the entire metering data into a single string.
+    
+    Args:
+        metering (dict): The metering data fetched from the BCU.
+        substation (str): Substation name
+    
+    Returns:
+        str: The formatted metering data string.
+    """
+    # Header
+    results = [
+        f"DATA STATUS CB {substation}",
+        getCurrTime(),
+        "-------------------------------------"
+    ]
+
+    # Iterate through the metering data and format each bay's information
+    for bay_name, statusCB in status.items():
+        # Get the HV and LV statuses
+        status_cb_hv = statusCB.get('statusCBHV')
+        status_cb_lv :int = statusCB.get('statusCBLV', None)  # Default to None if LV status doesn't exist
+        
+        # Handle connection failure
+        if status_cb_hv == 404:
+            results.append(f"{bay_name}: gagal konek ke IED")
+            continue
+        
+        # Handle when LV status doesn't exist
+        if status_cb_lv is None:
+            if status_cb_hv == 1:
+                results.append(f"{bay_name}: CB 150 kV Open")
+            elif status_cb_hv == 2:
+                results.append(f"{bay_name}: CB 150 kV Close")
+            else:
+                results.append(f"{bay_name}: CB 150 kV Invalid")
+            continue
+        
+        # Define valid status mappings for when both HV and LV exist
+        status_mapping = {
+            (2, 2): "CB 150 kV Close, CB 20 kV Close",
+            (1, 1): "CB 150 kV Open, CB 20 kV Open",
+            (2, 1): "CB 150 kV Close, CB 20 kV Open",
+            (1, 2): "CB 150 kV Open, CB 20 kV Close"
+        }
+        
+        # Handle invalid statuses
+        if status_cb_hv not in [1, 2]:
+            if status_cb_lv == 1:
+                results.append(f"{bay_name}: CB 150 kV Invalid, CB 20 kV Open")
+            elif status_cb_lv == 2:
+                results.append(f"{bay_name}: CB 150 kV Invalid, CB 20 kV Close")
+            else:
+                results.append(f"{bay_name}: CB 150 kV Invalid, CB 20 kV Invalid")
+        elif status_cb_lv not in [1, 2]:
+            if status_cb_hv == 1:
+                results.append(f"{bay_name}: CB 150 kV Open, CB 20 kV Invalid")
+            elif status_cb_hv == 2:
+                results.append(f"{bay_name}: CB 150 kV Close, CB 20 kV Invalid")
+        else:
+            # Use status mapping for valid combinations
+            message = status_mapping.get((status_cb_hv, status_cb_lv), "Invalid CB Status")
+            results.append(f"{bay_name}: {message}")
+
+    # Join the list into a final string
+    return "\n".join(results)

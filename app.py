@@ -162,7 +162,7 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(ERR_MESSAGE)
         return
     await update.message.reply_text("tunggu bre~")
-    metering = bcu_api.getMeteringBCU(db_BCU, type=config.get("TYPE_BCU"))
+    metering = bcu_api.getMetering(db_BCU, type=config.get("TYPE_BCU"))
 
     if not metering:
         await update.message.reply_text("Failed to retrieve metering data.")
@@ -173,6 +173,22 @@ async def metering_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(results_str, parse_mode=constants.ParseMode.HTML)
     print("bot: success")
 
+@check_mention
+async def statuscb_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if context.args:
+        await update.message.reply_text(ERR_MESSAGE)
+        return
+    await update.message.reply_text("tunggu bre~")
+    statuscb = bcu_api.getStatusCB(db_BCU, type=config.get("TYPE_BCU"))
+
+    if not statuscb:
+        await update.message.reply_text("Failed to retrieve metering data.")
+        return
+
+    # Prepare the result string and send it
+    results_str = tools.format_statuscb_data(statuscb,substation)
+    await update.message.reply_text(results_str, parse_mode=constants.ParseMode.HTML)
+    print("bot: success")
 
 @check_mention
 async def subscribe(update: Update, context: ContextTypes.DEFAULT_TYPE):

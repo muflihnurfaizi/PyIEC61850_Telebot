@@ -101,3 +101,37 @@ def getDataMeteringC264dss(connection, ied_name):
             dataValue.append(None)  # Append None to maintain order
 
     return dict(zip(dataNames, dataValue))
+
+def getDataStatusCBC264dss(connection, ied_name):
+    """
+    Fetch metering data from an IED using IEC 61850 protocol.
+    """
+    addr = ["CSWI1.Pos.stVal"]
+
+    dataNames = ["statusCBHV"]
+
+    if "TRF" in ied_name:
+        addr = ["CSWI1.Pos.stVal", "CSWI5.Pos.stVal" ]
+        dataNames = ["statusCBHV", "statusCBLV"]
+
+    dataValue = []
+    
+    for addr_item, data_name in zip(addr, dataNames):
+        try:
+            logging.info(f"Reading data for {data_name} at {ied_name}/{addr_item}")
+            value, error = iec61850.IedConnection_readObject(
+                connection, f"{ied_name}BCUCONTROL1/{addr_item}", iec61850.IEC61850_FC_ST
+            )
+            
+            if value is not None:
+                fval = iec61850.MmsValue_getBitStringAsIntegerBigEndian(value)
+                dataValue.append(fval)
+                iec61850.MmsValue_delete(value)
+            else:
+                logging.error(f"Failed to read object {addr_item} for IED {ied_name}")
+                dataValue.append(None)
+        except iec61850.IEDConnectionError as e:
+            logging.error(f"Error reading data {addr_item} for IED {ied_name}: {e}")
+            dataValue.append(None)  # Append None to maintain order
+
+    return dict(zip(dataNames, dataValue))
