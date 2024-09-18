@@ -40,6 +40,46 @@ def getDataMeteringC264dss(connection, ied_name):
         "W"
     ]
 
+    if "CPL2" in ied_name or "TIE" in ied_name:
+        addr = [
+            "rmsMMXU1.Hz.mag.f",
+            "rmsMMXU1.A.phsA.cVal.mag.f",
+            "rmsMMXU1.A.phsB.cVal.mag.f",
+            "rmsMMXU1.A.phsC.cVal.mag.f",
+            "rmsMMXU1.PhV.phsA.cVal.mag.f",
+            "rmsMMXU1.PhV.phsB.cVal.mag.f",
+            "rmsMMXU1.PhV.phsC.cVal.mag.f",
+        ]
+        dataNames = [
+            "freqTIE",
+            "currPhsA",
+            "currPhsB",
+            "currPhsC",
+            "voltPhsA",
+            "voltPhsB",
+            "voltPhsC",
+        ]
+
+    elif "CPL1" in ied_name:
+        addr = [
+            "rmsMMXU2.Hz.mag.f",
+            "rmsMMXU2.A.phsA.cVal.mag.f",
+            "rmsMMXU2.A.phsB.cVal.mag.f",
+            "rmsMMXU2.A.phsC.cVal.mag.f",
+            "rmsMMXU2.PhV.phsA.cVal.mag.f",
+            "rmsMMXU2.PhV.phsB.cVal.mag.f",
+            "rmsMMXU2.PhV.phsC.cVal.mag.f",
+        ]
+        dataNames = [
+            "freqTIE",
+            "currPhsA",
+            "currPhsB",
+            "currPhsC",
+            "voltPhsA",
+            "voltPhsB",
+            "voltPhsC",
+        ]
+
     dataValue = []
     
     for addr_item, data_name in zip(addr, dataNames):

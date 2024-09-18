@@ -26,6 +26,7 @@ def format_metering_data(metering: dict, substation: str) -> str:
     
     Args:
         metering (dict): The metering data fetched from the BCU.
+        substation (str): Substation name
     
     Returns:
         str: The formatted metering data string.
@@ -44,8 +45,17 @@ def format_metering_data(metering: dict, substation: str) -> str:
         w = round(measurements.get('W', 0.0))
         var = round(measurements.get('VAR', 0.0))
 
-        # Append formatted bay measurements to the results list
-        results.append(f"{bay_name}: {curr_phs_b} A, {volt_phs_ca} kV, {w} MW, {var} Mvar")
+        # Check if curr_phs_b is 404, indicating connection failure
+        if curr_phs_b == 404:
+            results.append(f"{bay_name}: gagal konek ke IED")
+
+        # Check if bay_name includes "Kopel" or "Bustie"
+        if "Kopel" in bay_name or "Bustie" in bay_name:
+            # Use a different format if "Kopel" or "Bustie" is in bay_name
+            results.append(f"{bay_name}: {curr_phs_b} A")
+        else:
+            # Default format for other bay names
+            results.append(f"{bay_name}: {curr_phs_b} A, {volt_phs_ca} kV, {w} MW, {var} Mvar")
 
     # Join the list into a final string
     return "\n".join(results)
