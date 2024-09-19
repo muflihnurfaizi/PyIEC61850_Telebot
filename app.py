@@ -27,6 +27,10 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 CHOOSING_BAY, CHOOSING_IED, CHOOSING_ACTION = range(3)
 ERR_MESSAGE = "Command nya kurang tepat bre~"
 MAX_FILES = 6
+# Get the current directory of the script
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+TMP_FOLDER = os.path.join(CURRENT_DIR, 'tmp')
+RECORD_DIR = os.path.join(CURRENT_DIR, 'record.zip')
 
 
 # Load database
@@ -295,10 +299,16 @@ async def choose_action(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if action == 'liatin':
         file_names = downIED_api.get_file_names(iedDatas, MAX_FILES)
+        logging.info(f"Retrieved files: {file_names}")
         results_str = tools.format_file_list(bay, ied, file_names)
         await query.edit_message_text(results_str, parse_mode=constants.ParseMode.HTML)
 
     elif action == 'ambilin':
+        file_names = downIED_api.get_file_names(iedDatas, MAX_FILES)
+        logging.info(f"Retrieved files: {file_names}")
+        downloaded_files = downIED_api.get_file(ied_info, file_names, TMP_FOLDER)
+        logging.info(f"Downloaded files: {downloaded_files}")
+        tools.zip_tmp_files("tmp", record_dir)
         await query.edit_message_text(f"Mengambil data untuk Bay: {bay}, IED: {ied}. Data: {iedDatas}")
 
     return ConversationHandler.END

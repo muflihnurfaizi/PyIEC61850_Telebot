@@ -1,5 +1,7 @@
 import datetime
-
+import logging
+import zipfile
+import os
 
 def getCurrTime():
 
@@ -156,4 +158,47 @@ def format_file_list(bay, ied, file_names):
     result_str += "\nBerikut brader\n"
 
     return result_str
+
+def zip_tmp_files(tmp_dir, output_zip_name="record.zip"):
+    """
+    Collect all files in the '/tmp/' directory and zip them into 'record.zip'.
+    
+    Args:
+        tmp_dir (str): The dir of tmp
+        output_zip_name (str): The name of the output zip file (default is 'record.zip').
+    
+    Returns:
+        str: The path to the created zip file.
+    """
+
+    try:
+        # Create a ZipFile object
+        with zipfile.ZipFile(output_zip_name, 'w') as zipf:
+            # Loop through all files in the /tmp/ directory
+            for foldername, subfolders, filenames in os.walk(tmp_dir):
+                for filename in filenames:
+                    # Full file path
+                    file_path = os.path.join(foldername, filename)
+
+                    # Add file to the zip archive
+                    zipf.write(file_path, os.path.basename(file_path))
+                    logging.info(f"Added {file_path} to the zip file.")
+
+        # Now delete the files after successful zipping
+        for foldername, subfolders, filenames in os.walk(tmp_dir):
+            for filename in filenames:
+                # Full file path
+                file_path = os.path.join(foldername, filename)
+                
+                # Delete the file after zipping
+                os.remove(file_path)
+                logging.info(f"Deleted {file_path} after zipping.")
+
+        logging.info(f"All files have been zipped successfully into {output_zip_name}")
+        return True, output_zip_name
+
+    except Exception as e:
+        logging.error(f"An error occurred while zipping the files: {str(e)}")
+        return False
+
 
